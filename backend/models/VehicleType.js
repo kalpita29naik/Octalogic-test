@@ -1,21 +1,23 @@
-import { DataType } from 'Sequelize'
+const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const VehicleType = sequelize.define('VehicleType', {
  VTypeID: {
-  type: DataType.INTERGER,
+  type: DataTypes.INTEGER,
   primaryKey: true,
   autoIncrement: true
  },
  type_name: {
-  type: DataType.STRING,
-  allowNULL: false
+  type: DataTypes.STRING,
+  allowNull: false
  },
  wheels: {
-  type: DataType.INTERGER,
-  allowNULL: false
+  type: DataTypes.INTEGER,
+  allowNull: false
  }
-
-}, { tableName: 'vehicle_types', timestamp: false });
+}, {
+ tableName: 'vehicle_types',
+ timestamps: false
+});
 
 module.exports = VehicleType;
