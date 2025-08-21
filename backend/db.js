@@ -17,4 +17,4 @@ sequelize.authenticate()
  .then(() => console.log("DB connected"))
  .catch((err) => console.error("Unable to connect", err));
 
-module.children = sequelize;
+module.exports = sequelize;

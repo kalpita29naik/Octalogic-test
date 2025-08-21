@@ -5,15 +5,20 @@ const VehicleType = sequelize.define('VehicleType', {
  VTypeID: {
   type: DataTypes.INTEGER,
   primaryKey: true,
-  autoIncrement: true
+  autoIncrement: true,
+  field: 'vtypeid' // exact column name in DB
  },
  type_name: {
   type: DataTypes.STRING,
-  allowNull: false
+  allowNull: false,
+  field: 'type_name'
  },
  wheels: {
   type: DataTypes.INTEGER,
-  allowNull: false
+  allowNull: false,
+  field: 'wheels',
+  validate: { isIn: [[2, 4]] }
+
  }
 }, {
  tableName: 'vehicle_types',

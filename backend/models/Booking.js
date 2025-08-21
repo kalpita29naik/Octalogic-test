@@ -1,18 +1,21 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./User');
-const Vehicle = require('./Vehicle');
+const Vehicle = require('./Vehicles');
 
 const Bookings = sequelize.define('Bookings', {
  bookingID: {
   type: DataTypes.INTEGER,
   primaryKey: true,
-  autoIncrement: true
+  autoIncrement: true,
+  field: 'bookingid'
  },
 
  start_date: {
   type: DataTypes.DATEONLY,
-  allowNull: false
+  allowNull: false,
+
+
  },
 
  end_date: {
@@ -22,12 +25,14 @@ const Bookings = sequelize.define('Bookings', {
 
  userID: {
   type: DataTypes.INTEGER,
-  allowNull: false
+  allowNull: false,
+  field: 'userid'
  },
 
  VID: {
   type: DataTypes.INTEGER,
-  allowNull: false
+  allowNull: false,
+  field: 'vid'
  }
 }, {
  tableName: 'booking',

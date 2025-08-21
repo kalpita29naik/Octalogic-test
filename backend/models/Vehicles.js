@@ -5,16 +5,19 @@ const VehicleType = require('./VehicleType');
 const Vehicles = sequelize.define('Vehicles', {
  VID: {
   type: DataTypes.INTEGER,
+  primaryKey: true,
   autoIncrement: true,
-  primaryKey: true
+  field: 'vid'
  },
  VName: {
   type: DataTypes.STRING,
-  allowNull: false
+  allowNull: false,
+  field: 'vname'
  },
  VTypeID: {
   type: DataTypes.INTEGER,
-  allowNull: false
+  allowNull: false,
+  field: 'vtypeid'
  }
 }, {
  tableName: 'vehicle',
