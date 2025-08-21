@@ -168,7 +168,7 @@ function App() {
               {vehicleTypes.map((type) => (
                 <FormControlLabel
                   key={type.VTypeID}
-                  value={String(type.VTypeID)}  // pass the actual typeId
+                  value={String(type.VTypeID)}
                   control={<Radio />}
                   label={type.type_name}
                 />
