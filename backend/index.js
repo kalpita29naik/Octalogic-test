@@ -67,14 +67,17 @@ app.post('/booking', async (req, res) => {
     }
 
     // check if uesr exits , else create new user 
-    let user = await User.findOne({ where: { first_name: fname, last_name: lname } });
+    let user = await User.findOne({
+      where: { first_name: fname, last_name: lname }
+    });
 
-    if (user) {
-      console.log("User exits")
-    }
-    else {
-
-      user = await User.create({ first_name: fname, last_name: lname })
+    // If not, create new user
+    if (!user) {
+      console.log("new User")
+      user = await User.create({
+        first_name: fname,
+        last_name: lname
+      });
     }
 
     // check for dates and same vehicle
@@ -103,7 +106,16 @@ app.post('/booking', async (req, res) => {
       start_date: sdate,
       end_date: edate
     });
-    res.json({ message: "Booking confirmed!", booking });
+    res.json({
+      message: "Booking confirmed!",
+      booking: {
+        bookingId: booking.bookingID,
+        user: { fname: user.first_name, lname: user.last_name },
+        vehicleId: vehicleId,
+        startDate: sdate,
+        endDate: edate
+      }
+    });
 
 
   } catch (err) {
