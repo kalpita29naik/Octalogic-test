@@ -13,11 +13,13 @@ This project is part of the Octalogic test.
 ### 1. Run Migration
 
 ```bash
+cd backend
 npx sequelize-cli db:migrate
 ```
 
 ### 2. Run Seed
 
 ```bash
+cd backend
 npx sequelize-cli db:seed:all
 ```

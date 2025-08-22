@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
-import { Button, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material"
-import { useEffect } from 'react';
+import { Box, Button, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material"
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+
 
 function App() {
   const [formData, setFormData] = useState({
@@ -14,9 +15,10 @@ function App() {
     endDate: ""
   });
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1); // to manage screens
   const [vehicleTypes, setVehiclesTypes] = useState([]);
   const [vehiclesName, setVehiclesName] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (step === 3 && formData.wheels) {
@@ -27,15 +29,6 @@ function App() {
     }
 
   }, [step, formData.wheels]);
-
-  // useEffect(() => {
-  //   if (step === 4 && formData.vehicleType) {
-  //     fetch(`http://localhost:5000/vehicles?typeId=${formData.vehicleType}`)
-  //       .then(res => res.json())
-  //       .then(data => setVehiclesName(data))
-  //       .catch(err => console.log(err));
-  //   }
-  // }, [step, formData.vehicleType]);
 
   useEffect(() => {
     if (step === 4 && formData.vehicleType) {
@@ -49,32 +42,51 @@ function App() {
     }
   }, [step, formData.vehicleType]);
 
-
-
   const handleNext = async () => {
     switch (step) {
       case 1:
-        if (!formData.firstName || !formData.lastName) return alert("Enter your name");
+        if (!formData.firstName || !formData.lastName) {
+          setErrors({ step1: "Please enter both first name and last name" });
+          return;
+        }
+        setErrors({});
         break;
 
       case 2:
-        if (!formData.wheels) return alert("Select your choice of wheels");
+        if (!formData.wheels) {
+          setErrors({ step2: " Select your choice of wheels" })
+          return
+        }
+        setErrors({});
         break;
 
       case 3:
-        if (!formData.vehicleType) return alert("Select your choice of Vehicles");
+        if (!formData.vehicleType) {
+          setErrors({ step3: "Select your choice of Vehicles Model" });
+          return;
+        }
+        setErrors({});
         break;
 
       case 4:
-        if (!formData.vehicle) return alert("Select your choice of Vehicle Model");
+        if (!formData.vehicle) {
+          setErrors({ step4: "Select your choice of Vehicle" });
+          return;
+        }
+        setErrors({});
         break;
 
       case 5:
-        if (!formData.startDate || !formData.endDate) return alert("Select Dates");
-
-        console.log("Selected VehicleType:", formData.vehicleType);
-        console.log("Selected Vehicle:", formData.vehicle);
-
+        if (!formData.startDate || !formData.endDate) {
+          setErrors({ step5: "Select Dates" });
+          return;
+        }
+        setErrors({});
+        if (new Date(formData.endDate) < new Date(formData.startDate)) {
+          setErrors({ step5: "End date should be after the start date" })
+          return
+        }
+        setErrors({});
 
         try {
           const res = await fetch("http://localhost:5000/booking", {
@@ -88,36 +100,36 @@ function App() {
               sdate: formData.startDate,
               edate: formData.endDate,
             })
-
           });
 
           const result = await res.json();
 
-          console.log("Selected vehicleType:", formData.vehicleType);
-          console.log("Available vehicleTypes:", vehicleTypes);
-
           if (res.ok) {
-            alert("Booking sucessfull");
-            console.log(result);
+            alert("Booking sucessfull!!");
+            setStep(6);
+
+
+
+
           } else {
-            alert(result.error || "Bookign failed");
+            alert(result.error || "Booking failed");
           }
 
         } catch (err) {
           console.log(err);
-          alert("Server err")
+          alert("Server error")
         }
         return;
-
 
       default: break;
 
     }
     setStep(step + 1)
   }
+
   return (
     <div className='flex justify-center items-center min-h-screen bg-[#F2F9FF]'>
-      <div className='p-6 rounded-lg shadow-blue-200 shadow-xl w-96'>
+      <div className='p-6 rounded-lg shadow-blue-200 shadow-xl w-[450px]'>
 
         {step === 1 && (
           <div>
@@ -129,6 +141,8 @@ function App() {
                 value={formData.firstName}
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                 size='small'
+
+
               />
             </div>
 
@@ -141,7 +155,12 @@ function App() {
                 size='small'
               />
             </div>
+
+            <p className="text-red-500 text-sm mt-2">{errors.step1}</p>
+
           </div>
+
+
         )}
 
         {step === 2 && (
@@ -155,6 +174,9 @@ function App() {
               <FormControlLabel label="4" control={<Radio />} value={4} />
               <FormControlLabel label="2" control={<Radio />} value={2} />
             </RadioGroup>
+
+
+            <p className="text-red-500 text-sm mt-2">{errors.step2}</p>
           </div>
         )}
 
@@ -174,6 +196,7 @@ function App() {
                 />
               ))}
             </RadioGroup>
+            <p className="text-red-500 text-sm mt-2">{errors.step3}</p>
           </div>
         )}
 
@@ -193,46 +216,82 @@ function App() {
                 />
               ))}
             </RadioGroup>
-
+            <p className="text-red-500 text-sm mt-2">{errors.step4}</p>
           </div>
         )}
 
         {step === 5 && (
           <div>
             <h1 className='text-3xl'>Select Your Dates</h1>
-            <div className='flex flex-col mt-6'>
-              <label>Start Date</label>
-              <TextField
-                type='date'
-                value={formData.startDate}
-                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-
+            <Box className="mt-6">
+              <DateRangePicker
+                value={[formData.startDate, formData.endDate]}
+                onChange={(newValue) => {
+                  setFormData({ ...formData, startDate: newValue[0], endDate: newValue[1] });
+                }}
+                className='w-full'
               />
-            </div>
-
-            <div className='flex flex-col mt-6'>
-              <label>End Date</label>
-              <TextField
-                type='date'
-                value={formData.endDate}
-                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-
-              />
-            </div>
+            </Box>
 
 
 
 
-
-
-
+            <p className="text-red-500 text-sm mt-2">{errors.step5}</p>
           </div>
         )}
 
-        {/* button */}
-        <div onClick={handleNext} className='mt-6'>
-          <Button variant='contained' className='w-full'>{step === 5 ? "Submit" : "Next"}</Button>
-        </div>
+        {step === 6 && (
+          <div >
+            <div className='text-xl font-bold mb-3 text-green-600'>Congratulation!! Your Vehicle is Booked</div>
+
+            <div className='space-y-2 text-lg'>
+
+              <div className='pb-2'>
+                Customer Name :
+                <span className='font-bold'> {formData.firstName} {formData.lastName}</span>
+              </div>
+
+              <div className='pb-2'>
+                Car Booked :
+                <span className='font-bold'>
+                  {vehicleTypes.find(v => String(v.VTypeID) === formData.vehicleType)?.type_name}
+                  {" "}
+                  {vehiclesName.find(v => String(v.VID) === formData.vehicle)?.VName}
+                </span>
+              </div>
+
+              <div className='pb-4'>
+                Booking Dates :
+                <span className='font-bold'>{formData.startDate} to {formData.endDate}</span>
+              </div>
+            </div>
+
+            <Button
+              variant='contained'
+              className='w-full '
+              onClick={() => {
+                setFormData({
+                  firstName: "",
+                  lastName: "",
+                  wheels: "",
+                  vehicleType: "",
+                  vehicle: "",
+                  startDate: "",
+                  endDate: ""
+                });
+                setStep(1)
+
+              }}>Finish</Button>
+          </div>
+        )
+        }
+
+
+        {step !== 6 && (
+          <div onClick={handleNext} className='mt-6'>
+            <Button variant='contained' className='w-full'>{step === 5 ? "Submit" : "Next"}</Button>
+          </div>
+        )}
       </div>
     </div >
   );
