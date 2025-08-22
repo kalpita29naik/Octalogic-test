@@ -14,8 +14,6 @@ const Bookings = sequelize.define('Bookings', {
  start_date: {
   type: DataTypes.DATEONLY,
   allowNull: false,
-
-
  },
 
  end_date: {

@@ -48,6 +48,12 @@ PORT = 5000
 
 ### 4.Database Setup
 
+# Create Database
+
+```bash
+psql -U postgres -c "CREATE DATABASE rental-system;"
+```
+
 # Run Migration
 
 ```bash
