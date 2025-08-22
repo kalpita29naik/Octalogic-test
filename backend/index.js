@@ -66,14 +66,14 @@ app.post('/booking', async (req, res) => {
       return res.status(400).json({ error: "all fields are not complete" })
     }
 
-    // check if uesr exits , else create if
+    // check if uesr exits , else create new user 
     let user = await User.findOne({ where: { first_name: fname, last_name: lname } });
 
     if (user) {
       console.log("User exits")
     }
     else {
-      console.log("User does not exists, so add detils of new user")
+
       user = await User.create({ first_name: fname, last_name: lname })
     }
 
@@ -96,7 +96,7 @@ app.post('/booking', async (req, res) => {
       return res.status(400).json({ error: "Vehicle already booked" });
     }
 
-    // if everything is fine , thenbook the vehicle
+    // if everything is fine , then book the vehicle
     const booking = await Booking.create({
       userID: user.userID,
       VID: vehicleId,
@@ -112,8 +112,6 @@ app.post('/booking', async (req, res) => {
   }
 
 })
-
-
 
 app.get('/', (req, res) => res.send("Backend is running"));
 

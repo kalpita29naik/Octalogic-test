@@ -2,7 +2,10 @@ INSERT INTO vehicle_types (type_name, wheels) VALUES
 ('Hatchback', 4),
 ('SUV', 4),
 ('Sedan', 4),
-('Cruiser', 2);
+('Cruiser', 2),
+('Sports',2),
+;
+
 
 INSERT INTO vehicle (VName, VTypeID) VALUES 
 ('Maruti Suzuki Swift', 1),
@@ -23,3 +26,8 @@ INSERT INTO vehicle (VName, VTypeID) VALUES
 ('Royal Enfield Meteor 350', 4),
 ('Jawa 42 Bobber', 4),
 ('Royal Enfield Bullet 350', 4);
+
+INSERT INTO vehicle (VName, VTypeID) VALUES 
+('Yamaha R15 V4', 5),
+('Kawasaki Ninja 300', 5,)
+('BMW G310 RR', 5);

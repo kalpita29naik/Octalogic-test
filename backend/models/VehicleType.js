@@ -6,7 +6,7 @@ const VehicleType = sequelize.define('VehicleType', {
   type: DataTypes.INTEGER,
   primaryKey: true,
   autoIncrement: true,
-  field: 'vtypeid' // exact column name in DB
+  field: 'vtypeid'
  },
  type_name: {
   type: DataTypes.STRING,
