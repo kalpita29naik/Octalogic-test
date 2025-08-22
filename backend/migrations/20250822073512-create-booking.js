@@ -4,10 +4,9 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('booking', {
       bookingid: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       start_date: {
         type: Sequelize.DATEONLY,
@@ -24,7 +23,6 @@ module.exports = {
           model: 'users',
           key: 'userid'
         },
-        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
       vid: {
@@ -34,7 +32,6 @@ module.exports = {
           model: 'vehicle',
           key: 'vid'
         },
-        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       }
     });

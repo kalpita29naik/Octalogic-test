@@ -262,7 +262,10 @@ function App() {
 
               <div className='pb-4'>
                 Booking Dates :
-                <span className='font-bold'>{formData.startDate} to {formData.endDate}</span>
+                <span className='font-bold'>
+                  {formData.startDate?.toLocaleDateString()} to {formData.endDate?.toLocaleDateString()}
+                </span>
+
               </div>
             </div>
 

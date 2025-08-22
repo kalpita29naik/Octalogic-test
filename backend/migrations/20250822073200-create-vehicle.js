@@ -4,10 +4,9 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('vehicle', {
       vid: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        autoIncrement: true
       },
       vname: {
         type: Sequelize.STRING,
@@ -20,7 +19,6 @@ module.exports = {
           model: 'vehicle_types',
           key: 'vtypeid'
         },
-        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       }
     });
